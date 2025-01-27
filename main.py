@@ -4,7 +4,7 @@ import os
 import sys
 
 import book_utils
-from book_utils.epub_utils import wall_all_books
+from book_utils.epub_utils import feed_all_books
 
 
 def init_logging():
@@ -35,5 +35,5 @@ if __name__ == '__main__':
         exit()
 
     init_logging()
-    wall_all_books(sys.argv[1])
+    feed_all_books(sys.argv[1])
     logging.info("Done")

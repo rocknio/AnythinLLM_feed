@@ -48,7 +48,7 @@ def read_epub_with_epy_reader(epub_f):
         return None, None, None
 
 
-def wall_all_books(path):
+def feed_all_books(path):
     # 使用 Path 对象
     path = Path(path)
     # 使用 glob 匹配所有 .azw3 文件
