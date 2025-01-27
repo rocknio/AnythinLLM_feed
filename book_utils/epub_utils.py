@@ -31,8 +31,7 @@ def read_epub_content(epub_f):
         epub_title = book.get_metadata('DC', 'title')[0][0]
         epub_author = book.get_metadata('DC', 'creator')[0][0]
 
-        logging.debug(f"书名: {epub_title}")
-        logging.debug(f"作者: {epub_author}")
+        logging.debug(f"书名: {epub_title}, 作者: {epub_author}")
 
         text_content = []
         for item in book.get_items():
@@ -48,14 +47,19 @@ def read_epub_content(epub_f):
         return None, None, None
 
 
-def feed_all_books(path):
+def feed_all_books(settings):
     # 使用 Path 对象
-    path = Path(path)
+    path = Path(settings['book_path'])
     # 使用 glob 匹配所有 .azw3 文件
     azw3_files = list(path.rglob('*.azw3'))
+    total_count = len(azw3_files)
+    logging.info(f"文件总数：{total_count}")
+    idx = 1
     for file in azw3_files:
         if file.name.endswith(".azw3"):
-            logging.info(f"Processing {file}")
+            logging.info(f"Processing {idx}/{total_count}, {file}")
+            idx += 1
+
             azw3_f = os.path.join(path, file.name)
             epub_f = os.path.join(path, file.name.replace(".azw3", ".epub"))
             f = convert_azw3_to_epub(azw3_f, epub_f)
@@ -64,6 +68,10 @@ def feed_all_books(path):
                 continue
 
             title, author, content = read_epub_content(epub_f)
+            if title is None or author is None or content is None:
+                logging.error(f"读取 {epub_f} 时出错")
+                continue
+
             logging.info(f"book: {epub_f}, 书名: {title}, 作者: {author}")
             # todo 给llm喂数据
 

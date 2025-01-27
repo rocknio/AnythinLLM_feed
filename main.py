@@ -5,6 +5,7 @@ import sys
 
 import book_utils
 from book_utils.epub_utils import feed_all_books
+from settings import load_settings
 
 
 def init_logging():
@@ -30,10 +31,7 @@ def init_logging():
 
 
 if __name__ == '__main__':
-    if len(sys.argv) < 2:
-        print("Usage: {} <books root path>".format(sys.argv[0]))
-        exit()
-
     init_logging()
-    feed_all_books(sys.argv[1])
+    settings = load_settings()
+    feed_all_books(settings)
     logging.info("Done")

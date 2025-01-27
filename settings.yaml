@@ -1,0 +1,8 @@
+AnythingLLM:
+  Host: localhost
+  Port: 3001
+  ApiKey: 8FG8G2T-VENM61E-K30X8F9-E12ZG73
+  WorkspaceName: 'amazon books'
+
+Books:
+  RootPath: 'd:\电子书\亚马逊3w本书\'
