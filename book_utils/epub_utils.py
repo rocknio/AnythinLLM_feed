@@ -23,7 +23,7 @@ def convert_azw3_to_epub(azw3_f, epub_f):
     return epub_f
 
 
-def read_epub_with_epy_reader(epub_f):
+def read_epub_content(epub_f):
     try:
         book = epub.read_epub(epub_f)
 
@@ -63,7 +63,7 @@ def feed_all_books(path):
                 logging.error(f"转换 {azw3_f} 到 {epub_f} 时出错")
                 continue
 
-            title, author, content = read_epub_with_epy_reader(epub_f)
+            title, author, content = read_epub_content(epub_f)
             logging.info(f"book: {epub_f}, 书名: {title}, 作者: {author}")
             # todo 给llm喂数据
 
