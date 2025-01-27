@@ -8,6 +8,8 @@ from ebooklib.epub import EpubHtml
 
 from pathlib import Path
 
+from feed_utils.anything_llm_feed import do_feed_books
+
 
 def convert_azw3_to_epub(azw3_f, epub_f):
     """使用 Calibre 将 .azw3 文件转换为 .epub 文件。"""
@@ -55,6 +57,7 @@ def feed_all_books(settings):
     total_count = len(azw3_files)
     logging.info(f"文件总数：{total_count}")
     idx = 1
+    batch_files = []
     for file in azw3_files:
         if file.name.endswith(".azw3"):
             logging.info(f"Processing {idx}/{total_count}, {file}")
@@ -62,6 +65,7 @@ def feed_all_books(settings):
 
             azw3_f = os.path.join(path, file.name)
             epub_f = os.path.join(path, file.name.replace(".azw3", ".epub"))
+            txt_f = os.path.join(path, file.name.replace(".azw3", ".txt"))
             f = convert_azw3_to_epub(azw3_f, epub_f)
             if f is None:
                 logging.error(f"转换 {azw3_f} 到 {epub_f} 时出错")
@@ -72,7 +76,20 @@ def feed_all_books(settings):
                 logging.error(f"读取 {epub_f} 时出错")
                 continue
 
-            logging.info(f"book: {epub_f}, 书名: {title}, 作者: {author}")
-            # todo 给llm喂数据
-
             os.remove(epub_f)
+
+            with open(txt_f, 'w', encoding='utf-8') as txt_file:
+                txt_file.write(f"title: {title}\n")
+                txt_file.write(f"author: {author}\n")
+                txt_file.write(content)
+
+            logging.debug(f"book: {epub_f}, 书名: {title}, 作者: {author}")
+
+            batch_files.append(txt_f)
+            if batch_files.__len__() >= settings['batch_size']:
+                do_feed_books(batch_files)
+
+            for f in batch_files:
+                os.remove(f)
+
+            batch_files.clear()

@@ -6,3 +6,4 @@ AnythingLLM:
 
 Books:
   RootPath: 'd:\电子书\亚马逊3w本书\'
+  BatchSize: 10
