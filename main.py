@@ -1,11 +1,10 @@
+# -*- coding: utf-8 -*-
+
 import logging
 import logging.handlers
 import os
-import sys
 
-import book_utils
 from book_utils.epub_utils import feed_all_books
-from settings import load_settings
 
 
 def init_logging():
@@ -32,6 +31,6 @@ def init_logging():
 
 if __name__ == '__main__':
     init_logging()
-    settings = load_settings()
-    feed_all_books(settings)
+
+    feed_all_books()
     logging.info("Done")

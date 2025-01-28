@@ -1,9 +1,8 @@
 AnythingLLM:
-  Host: localhost
-  Port: 3001
+  ApiUrl: http://localhost:3001/api
   ApiKey: 8FG8G2T-VENM61E-K30X8F9-E12ZG73
   WorkspaceName: 'amazon books'
 
 Books:
-  RootPath: 'd:\电子书\亚马逊3w本书\'
-  BatchSize: 10
+  RootPath: 'd:\Books\AmazonBooks\'
+  BatchSize: 1

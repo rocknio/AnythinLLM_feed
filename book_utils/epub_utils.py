@@ -1,6 +1,9 @@
+# -*- coding: utf-8 -*-
+
 import logging
 import os
 import subprocess
+from typing import Union, Tuple
 
 from bs4 import BeautifulSoup
 from ebooklib import epub
@@ -9,9 +12,10 @@ from ebooklib.epub import EpubHtml
 from pathlib import Path
 
 from feed_utils.anything_llm_feed import do_feed_books
+from settings import Settings
 
 
-def convert_azw3_to_epub(azw3_f, epub_f):
+def convert_azw3_to_epub(azw3_f: str, epub_f: str) -> Union[str, None]:
     """使用 Calibre 将 .azw3 文件转换为 .epub 文件。"""
     try:
         subprocess.run(["C:\Program Files\Calibre2\ebook-convert.exe", azw3_f, epub_f], check=True, capture_output=True, text=True)
@@ -25,13 +29,13 @@ def convert_azw3_to_epub(azw3_f, epub_f):
     return epub_f
 
 
-def read_epub_content(epub_f):
+def read_epub_content(epub_f: str) -> Tuple[str, str, str]:
     try:
         book = epub.read_epub(epub_f)
 
         # 获取元数据
-        epub_title = book.get_metadata('DC', 'title')[0][0]
-        epub_author = book.get_metadata('DC', 'creator')[0][0]
+        epub_title = str(book.get_metadata('DC', 'title')[0][0])
+        epub_author = str(book.get_metadata('DC', 'creator')[0][0])
 
         logging.debug(f"书名: {epub_title}, 作者: {epub_author}")
 
@@ -46,12 +50,14 @@ def read_epub_content(epub_f):
 
     except Exception as e:
         logging.error(f"读取 EPUB 文件出错: {e}")
-        return None, None, None
+        return "", "", ""
 
 
-def feed_all_books(settings):
+def feed_all_books():
+    settings = Settings()
+
     # 使用 Path 对象
-    path = Path(settings['book_path'])
+    path = Path(settings.Books['RootPath'])
     # 使用 glob 匹配所有 .azw3 文件
     azw3_files = list(path.rglob('*.azw3'))
     total_count = len(azw3_files)
@@ -63,16 +69,16 @@ def feed_all_books(settings):
             logging.info(f"Processing {idx}/{total_count}, {file}")
             idx += 1
 
-            azw3_f = os.path.join(path, file.name)
-            epub_f = os.path.join(path, file.name.replace(".azw3", ".epub"))
-            txt_f = os.path.join(path, file.name.replace(".azw3", ".txt"))
+            azw3_f = str(os.path.join(file.parent, file.name))
+            epub_f = str(os.path.join(file.parent, file.name.replace(".azw3", ".epub")))
+            txt_f = str(os.path.join(file.parent, file.name.replace(".azw3", ".txt")))
             f = convert_azw3_to_epub(azw3_f, epub_f)
             if f is None:
                 logging.error(f"转换 {azw3_f} 到 {epub_f} 时出错")
                 continue
 
             title, author, content = read_epub_content(epub_f)
-            if title is None or author is None or content is None:
+            if title == "" or author == "" or content == "":
                 logging.error(f"读取 {epub_f} 时出错")
                 continue
 
@@ -86,7 +92,7 @@ def feed_all_books(settings):
             logging.debug(f"book: {epub_f}, 书名: {title}, 作者: {author}")
 
             batch_files.append(txt_f)
-            if batch_files.__len__() >= settings['batch_size']:
+            if batch_files.__len__() >= settings.Books['BatchSize']:
                 do_feed_books(batch_files)
 
             for f in batch_files:
