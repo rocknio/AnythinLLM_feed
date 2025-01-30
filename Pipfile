@@ -8,6 +8,7 @@ ebooklib = "*"
 beautifulsoup4 = "*"
 pyyaml = "*"
 requests = "*"
+requests-toolbelt = "*"
 
 [dev-packages]
 
