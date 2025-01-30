@@ -5,4 +5,4 @@ AnythingLLM:
 
 Books:
   RootPath: 'd:\Books\AmazonBooks\'
-  BatchSize: 1
+  BatchSize: 10

@@ -11,6 +11,7 @@ from ebooklib.epub import EpubHtml
 
 from pathlib import Path
 
+from book_utils.book_detail import BookInfo
 from feed_utils.anything_llm_feed import do_feed_books
 from settings import Settings
 
@@ -71,7 +72,6 @@ def feed_all_books():
 
             azw3_f = str(os.path.join(file.parent, file.name))
             epub_f = str(os.path.join(file.parent, file.name.replace(".azw3", ".epub")))
-            txt_f = str(os.path.join(file.parent, file.name.replace(".azw3", ".txt")))
             f = convert_azw3_to_epub(azw3_f, epub_f)
             if f is None:
                 logging.error(f"转换 {azw3_f} 到 {epub_f} 时出错")
@@ -83,19 +83,14 @@ def feed_all_books():
                 continue
 
             os.remove(epub_f)
-
-            with open(txt_f, 'w', encoding='utf-8') as txt_file:
-                txt_file.write(f"title: {title}\n")
-                txt_file.write(f"author: {author}\n")
-                txt_file.write(content)
-
             logging.debug(f"book: {epub_f}, 书名: {title}, 作者: {author}")
 
-            batch_files.append(txt_f)
+            batch_files.append(BookInfo(
+                title=title,
+                author=author,
+                content=content
+            ))
+
             if batch_files.__len__() >= settings.Books['BatchSize']:
                 do_feed_books(batch_files)
-
-            for f in batch_files:
-                os.remove(f)
-
-            batch_files.clear()
+                batch_files.clear()
