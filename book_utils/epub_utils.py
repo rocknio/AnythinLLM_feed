@@ -18,8 +18,9 @@ from settings import Settings
 
 def convert_azw3_to_epub(azw3_f: str, epub_f: str) -> Union[str, None]:
     """使用 Calibre 将 .azw3 文件转换为 .epub 文件。"""
+    settings = Settings()
     try:
-        subprocess.run(["C:\Program Files\Calibre2\ebook-convert.exe", azw3_f, epub_f], check=True, capture_output=True, text=True)
+        subprocess.run([settings.Convert['ToolPath'], azw3_f, epub_f], check=True, capture_output=True, text=True)
         # 添加 capture_output 和 text
         logging.info(f"成功将 {azw3_f} 转换为 {epub_f}")
     except subprocess.CalledProcessError as e:

@@ -6,3 +6,6 @@ AnythingLLM:
 Books:
   RootPath: 'd:\Books\AmazonBooks\'
   BatchSize: 10
+
+Convert:
+  ToolPath: 'C:\Program Files\Calibre2\ebook-convert.exe'
