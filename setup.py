@@ -5,12 +5,12 @@ import os
 
 # 获取所有需要编译的 .py 文件
 def get_py_files(path):
-    py_files = []
+    all_py_files = []
     for root, dirs, files in os.walk(path):
         for file in files:
             if file.endswith(".py") and file not in exclude:
-                py_files.append(os.path.join(root, file))
-    return py_files
+                all_py_files.append(os.path.join(root, file))
+    return all_py_files
 
 
 exclude = [
