@@ -2,10 +2,6 @@ import os
 import subprocess
 from pathlib import Path
 
-from setuptools import setup
-from Cython.Build import cythonize
-from setuptools import find_packages
-
 exclude = [
     "__init__.py",
     "setup.py"
