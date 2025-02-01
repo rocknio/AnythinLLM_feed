@@ -29,8 +29,12 @@ def init_logging():
     logging.info("Current log level is : %s", logging.getLevelName(logger.getEffectiveLevel()))
 
 
-if __name__ == '__main__':
+def run():
     init_logging()
 
     feed_all_books()
     logging.info("Done")
+
+
+if __name__ == '__main__':
+    run()

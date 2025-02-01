@@ -1,11 +1,20 @@
 import os
+import shutil
 import subprocess
 from pathlib import Path
 
 exclude = [
     "__init__.py",
-    "setup.py"
+    "setup.py",
+    "run.py"
 ]
+
+copy_files = [
+    "settings.yaml",
+    "run.py"
+]
+
+dist_dir = "build\\lib.win-amd64-cpython-312"
 
 
 def compile_all_py(path):
@@ -23,6 +32,7 @@ def compile_all_py(path):
         print(f"Compiled {py_file}")
 
     delete_c_files(py_files)
+    copy_ex_files()
 
 
 # 自动删除生成的 .c 文件
@@ -32,6 +42,11 @@ def delete_c_files(py_files):
         if os.path.exists(c_file):
             os.remove(c_file)
             print(f"Deleted {c_file}")
+
+
+def copy_ex_files():
+    for file in copy_files:
+        shutil.copyfile(file, f"{dist_dir}\\{file}")
 
 
 if __name__ == '__main__':
