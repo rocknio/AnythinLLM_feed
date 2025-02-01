@@ -11,7 +11,7 @@ exclude = [
 def compile_all_py(path):
     # 使用 Path 对象
     path = Path(path)
-    # 使用 glob 匹配所有 .azw3 文件
+    # 使用 glob 匹配所有 .py 文件
     py_files = list(path.rglob('*.py'))
     for py_file in py_files:
         if os.path.basename(py_file) in exclude:
