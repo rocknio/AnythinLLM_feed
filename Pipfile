@@ -9,6 +9,7 @@ beautifulsoup4 = "*"
 pyyaml = "*"
 requests = "*"
 requests-toolbelt = "*"
+cython = "*"
 
 [dev-packages]
 

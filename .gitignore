@@ -259,3 +259,7 @@ cython_debug/
 *.azw3
 *.epub
 log
+build
+*.pyd
+*.so
+*.c
