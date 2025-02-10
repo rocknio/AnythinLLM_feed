@@ -2,6 +2,11 @@ from setuptools import setup, Extension
 from Cython.Build import cythonize
 import os
 
+exclude = [
+    "__init__.py",
+    "setup.py",
+    "run.py"
+]
 
 # 获取所有需要编译的 .py 文件
 def get_py_files(path):
@@ -12,12 +17,6 @@ def get_py_files(path):
                 all_py_files.append(os.path.join(root, file))
     return all_py_files
 
-
-exclude = [
-    "__init__.py",
-    "setup.py",
-    "run.py"
-]
 
 # 获取所有 .py 文件
 py_files = get_py_files(os.path.dirname(os.path.abspath(__file__)))
