@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 import logging
-from pathlib import Path
 from typing import List
-from urllib.parse import quote
 
 import requests
 
